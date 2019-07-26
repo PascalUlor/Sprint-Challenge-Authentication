@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const requestHelper = require('../helpers');
 
 const jwtKey =
   process.env.JWT_SECRET ||
@@ -7,6 +8,7 @@ const jwtKey =
 // quickly see what this file exports
 module.exports = {
   authenticate,
+  createToken
 };
 
 // implementation details
@@ -23,7 +25,21 @@ function authenticate(req, res, next) {
     });
   } else {
     return res.status(401).json({
-      error: 'No token provided, must be set on the Authorization Header',
+      error: 'No token provided, must be set on the Authorization Header'
     });
   }
 }
+
+const createToken = (res, statusCode, message, user) => {
+  const payload = {
+    username: user.username
+  };
+  const token = jwt.sign(payload, jwtKey, {
+    expiresIn: 60 * 60 * 1440
+  });
+  const logInfo = {
+    payload,
+    token
+  };
+  requestHelper.success(res, statusCode, message, logInfo);
+};
