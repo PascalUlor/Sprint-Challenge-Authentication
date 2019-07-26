@@ -1,6 +1,7 @@
 const axios = require('axios');
-const userModel = require('../database/models');
+// const userModel = require('../database/models');
 const { validateUserRegistration } = require('../middlewares');
+const requestHelper = require('../helpers');
 
 const {
   authenticate,
@@ -10,7 +11,7 @@ const {
 
 module.exports = server => {
   server.post('/api/register', validateUserRegistration, register);
-  server.post('/api/login', login);
+  server.post('/api/login', validatePassword, login);
   server.get('/api/jokes', authenticate, getJokes);
 };
 
@@ -24,8 +25,14 @@ async function register(req, res) {
   }
 }
 
-function login(req, res) {
+async function login(req, res) {
   // implement user login
+  try {
+    const payload = req.user;
+    createToken(res, 200, 'Login succesful', payload);
+  } catch (err) {
+    return requestHelper.error(res, 500, 'server error');
+  }
 }
 
 function getJokes(req, res) {

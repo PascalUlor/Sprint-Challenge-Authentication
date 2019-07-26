@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const requestHelper = require('../helpers');
+const userModel = require('../database/models');
 
 const jwtKey =
   process.env.JWT_SECRET ||
@@ -45,6 +46,7 @@ const validatePassword = async (req, res, next) => {
   try {
     const check = await userModel.findUser(username).first();
     const checkPassword = await bcrypt.compareSync(password, check.password);
+    console.log(check);
     if (check.username === username && checkPassword) {
       // eslint-disable-next-line require-atomic-updates
       req.user = check;
