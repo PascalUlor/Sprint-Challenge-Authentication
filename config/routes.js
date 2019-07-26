@@ -1,4 +1,5 @@
 const axios = require('axios');
+const userModel = require('../database/models');
 
 const { authenticate } = require('../auth/authenticate');
 
@@ -18,7 +19,7 @@ function login(req, res) {
 
 function getJokes(req, res) {
   const requestOptions = {
-    headers: { accept: 'application/json' },
+    headers: { accept: 'application/json' }
   };
 
   axios
