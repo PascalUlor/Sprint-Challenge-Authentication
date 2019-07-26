@@ -1,16 +1,27 @@
 const axios = require('axios');
 const userModel = require('../database/models');
+const { validateUserRegistration } = require('../middlewares');
 
-const { authenticate } = require('../auth/authenticate');
+const {
+  authenticate,
+  createToken,
+  validatePassword
+} = require('../auth/authenticate');
 
 module.exports = server => {
-  server.post('/api/register', register);
+  server.post('/api/register', validateUserRegistration, register);
   server.post('/api/login', login);
   server.get('/api/jokes', authenticate, getJokes);
 };
 
-function register(req, res) {
+async function register(req, res) {
   // implement user registration
+  try {
+    const payload = req.new;
+    createToken(res, 201, 'Signup succesful', ...payload);
+  } catch (err) {
+    return requestHelper.error(res, 500, 'server error');
+  }
 }
 
 function login(req, res) {
