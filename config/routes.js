@@ -1,19 +1,18 @@
 const axios = require('axios');
-// const userModel = require('../database/models');
+const express = require('express');
 const { validateUserRegistration } = require('../middlewares');
 const requestHelper = require('../helpers');
-
-const {
-  authenticate,
-  createToken,
-  validatePassword
-} = require('../auth/authenticate');
 
 module.exports = server => {
   server.post('/api/register', validateUserRegistration, register);
   server.post('/api/login', validatePassword, login);
   server.get('/api/jokes', authenticate, getJokes);
 };
+const {
+  authenticate,
+  createToken,
+  validatePassword
+} = require('../auth/authenticate');
 
 async function register(req, res) {
   // implement user registration

@@ -7,7 +7,8 @@ const validateUserRegistration = async (req, res, next) => {
   try {
     const checkUser = await userModel.findUser(username);
     if (req.body.username && req.body.password && checkUser.length === 0) {
-      const hash = await bcrypt.hashSync(password);
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(password, salt);
       const newUser = await userModel.addUser({
         username,
         password: hash

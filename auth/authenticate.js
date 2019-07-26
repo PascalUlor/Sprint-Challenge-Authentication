@@ -10,7 +10,7 @@ const jwtKey =
 // implementation details
 function authenticate(req, res, next) {
   // const token = req.get('Authorization');
-  const token = req.headers.authorization;
+  const token = req.get('Authorization');
 
   if (token) {
     jwt.verify(token, jwtKey, (err, decoded) => {
@@ -46,7 +46,6 @@ const validatePassword = async (req, res, next) => {
   try {
     const check = await userModel.findUser(username).first();
     const checkPassword = await bcrypt.compareSync(password, check.password);
-    console.log(check);
     if (check.username === username && checkPassword) {
       // eslint-disable-next-line require-atomic-updates
       req.user = check;

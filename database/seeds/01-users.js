@@ -19,6 +19,11 @@ exports.seed = function(knex, Promise) {
           username: 'sam',
           password:
             '$2y$12$M0k0YXl/5tOifwsHTnLer.YRbIep2ts9/B1wqOJmed8WRDpEgtBxi'
+        },
+        {
+          username: 'jon',
+          password:
+            '$2y$12$6P1WslqainNPjErl4C9btusr1swpZQBIEy9s/nugvRxmKWyEzyB5u'
         }
       ]);
     });
