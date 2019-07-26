@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Redirect,
   Link
 } from 'react-router-dom';
-import axios from 'axios';
+import AxiosWithHeader from './axios';
 import styled from 'styled-components';
 import JokeCard from './Components/JokeCard';
 import UserForm from './Components/UserForm';
@@ -14,77 +15,28 @@ const baseUrl = `http://localhost:3300/api`;
 
 const ProjectContext = React.createContext();
 
-export function App() {
+export function App(props) {
   const [jokes, setJokes] = useState([]);
-  const [newUser, setNewUser] = useState({
-    username: '',
-    password: ''
-  });
-
-  const handleInputChange = e => {
-    const target = e.target;
-    const value = target.value;
-    const name = target.name;
-    setNewUser(newUser => ({ ...newUser, [name]: value }));
-  };
 
   const FetchJokes = () => {
-    axios
-      .get(`${baseUrl}`)
+    AxiosWithHeader()
+      .get(`${baseUrl}/jokes`)
       .then(res => {
-        setJokes(res.data.data);
+        setJokes(res.data);
       })
       .catch(err => {
         return err.statusText;
       });
   };
 
-  const registerUser = event => {
-    event.preventDefault();
-    let CharDeet = {
-      username: newUser.username,
-      password: newUser.password
-    };
-    axios
-      .post(`${baseUrl}/register`, CharDeet)
-      .then(res => {})
-      .catch(err => console.log(err));
-    setNewUser({
-      name: '',
-      description: ''
-    });
-    FetchJokes();
-  };
-
-  const loginUser = event => {
-    event.preventDefault();
-    let CharDeet = {
-      username: newUser.username,
-      password: newUser.password
-    };
-    axios
-      .post(`${baseUrl}/login`, CharDeet)
-      .then(res => {})
-      .catch(err => console.log(err));
-    setNewUser({
-      name: '',
-      description: ''
-    });
-    FetchJokes();
-  };
-
-  useEffect(FetchJokes, []);
-
   return (
     <ProjectContext.Provider
       value={{
         jokes: jokes,
-        regUser: registerUser,
-        loginUser: loginUser,
-        handleInputChange: handleInputChange
+        fetch: FetchJokes
       }}
     >
-      <Header> Lord Of The Rings</Header>
+      <Header> Dad Jokes</Header>
       <Main>
         <Router>
           <h1>Dad Jokes</h1>
@@ -105,8 +57,8 @@ export function App() {
             }}
           />
 
-          <Route path="/login" component={UserForm} />
-          <Route path="/signup" component={UserForm} />
+          <Route path="/login" render={props => <UserForm props={props} />} />
+          <Route path="/signup" render={props => <UserForm props={props} />} />
         </Router>
       </Main>
     </ProjectContext.Provider>

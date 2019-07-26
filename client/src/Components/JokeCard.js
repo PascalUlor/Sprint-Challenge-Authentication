@@ -6,17 +6,10 @@ const JokeCard = props => {
   const value = useContext(ProjectContext);
   return (
     <div>
-      {value.chars.map(char => {
+      {value.jokes.map(joke => {
         return (
-          <Card key={char.id}>
-            <p>{char.name}</p>
-            <p>{char.description}</p>
-            <span>
-              <button onClick={() => value.GetCharsById(char.id)}>Edit</button>
-            </span>
-            <span>
-              <button onClick={() => value.DeleteUser(char.id)}>Delete</button>
-            </span>
+          <Card key={joke.id}>
+            <p>{joke.joke}</p>
           </Card>
         );
       })}
